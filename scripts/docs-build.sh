@@ -2,13 +2,14 @@
 
 set -eux
 
-sbt copyReadme mdoc
+# sbt copyReadme mdoc
 
 gitbook="node_modules/gitbook-cli/bin/gitbook.js"
 
 if ! test -e $gitbook; then
+  npm install graceful-fs@latest
   npm install gitbook
-  npm install gitbook-cli
+  npm install gengjiawen/gitbook-cli
 fi
 
 $gitbook build mdocs/target/mdoc docs/book

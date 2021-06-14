@@ -1,0 +1,497 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Working with CSV and Parquet · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="TypedEncoder.html" />
+    
+    
+    <link rel="prev" href="TypedDatasetVsSparkDataset.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="FeatureOverview.html">
+            
+                <a href="FeatureOverview.html">
+            
+                    
+                    TypedDataset: Feature Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="TypedDatasetVsSparkDataset.html">
+            
+                <a href="TypedDatasetVsSparkDataset.html">
+            
+                    
+                    Comparing TypedDatasets with Spark's Datasets
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4" data-path="WorkingWithCsvParquetJson.html">
+            
+                <a href="WorkingWithCsvParquetJson.html">
+            
+                    
+                    Working with CSV and Parquet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="TypedEncoder.html">
+            
+                <a href="TypedEncoder.html">
+            
+                    
+                    Typed Encoders in Frameless
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="Injection.html">
+            
+                <a href="Injection.html">
+            
+                    
+                    Injection: Creating Custom Encoders
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="Job.html">
+            
+                <a href="Job.html">
+            
+                    
+                    Job[A]
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="Cats.html">
+            
+                <a href="Cats.html">
+            
+                    
+                    Using Cats with RDDs
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="TypedML.html">
+            
+                <a href="TypedML.html">
+            
+                    
+                    Using Spark ML with TypedDataset
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="TypedDataFrame.html">
+            
+                <a href="TypedDataFrame.html">
+            
+                    
+                    Proof of Concept: TypedDataFrame
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Working with CSV and Parquet</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="working-with-csv-and-parquet-data">Working with CSV and Parquet data</h1>
+<p>You need these imports for most Frameless projects. </p>
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> frameless._
+<span class="hljs-keyword">import</span> frameless.syntax._
+<span class="hljs-keyword">import</span> frameless.functions.aggregate._
+</code></pre>
+<h2 id="working-with-csv">Working with CSV</h2>
+<p>We first load some CSV data and print the schema. </p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> df = spark.read.format(<span class="hljs-string">&quot;csv&quot;</span>).load(testDataPath)
+<span class="hljs-comment">// df: org.apache.spark.sql.package.DataFrame = [_c0: string, _c1: string ... 3 more fields]</span>
+df.show(<span class="hljs-number">2</span>)
+<span class="hljs-comment">// +---+---+---+---+-----------+</span>
+<span class="hljs-comment">// |_c0|_c1|_c2|_c3|        _c4|</span>
+<span class="hljs-comment">// +---+---+---+---+-----------+</span>
+<span class="hljs-comment">// |5.1|3.5|1.4|0.2|Iris-setosa|</span>
+<span class="hljs-comment">// |4.9|3.0|1.4|0.2|Iris-setosa|</span>
+<span class="hljs-comment">// +---+---+---+---+-----------+</span>
+<span class="hljs-comment">// only showing top 2 rows</span>
+<span class="hljs-comment">// </span>
+df.printSchema
+<span class="hljs-comment">// root</span>
+<span class="hljs-comment">//  |-- _c0: string (nullable = true)</span>
+<span class="hljs-comment">//  |-- _c1: string (nullable = true)</span>
+<span class="hljs-comment">//  |-- _c2: string (nullable = true)</span>
+<span class="hljs-comment">//  |-- _c3: string (nullable = true)</span>
+<span class="hljs-comment">//  |-- _c4: string (nullable = true)</span>
+<span class="hljs-comment">//</span>
+</code></pre>
+<p>The easiest way to read from CSV into a <code>TypedDataset</code> is to create a case class that follows 
+the exact number, type, and order for the fields as they appear in the CSV file. This is shown in 
+the example bellow with the use of the <code>Iris</code> case class.</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">final</span> <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Iris</span>(<span class="hljs-params">sLength: <span class="hljs-type">Double</span>, sWidth: <span class="hljs-type">Double</span>, pLength: <span class="hljs-type">Double</span>, pWidth: <span class="hljs-type">Double</span>, kind: <span class="hljs-type">String</span></span>)</span>
+<span class="hljs-keyword">val</span> testDataDf = spark.read.format(<span class="hljs-string">&quot;csv&quot;</span>).schema(<span class="hljs-type">TypedExpressionEncoder</span>[<span class="hljs-type">Iris</span>].schema).load(testDataPath)
+<span class="hljs-comment">// testDataDf: org.apache.spark.sql.package.DataFrame = [sLength: double, sWidth: double ... 3 more fields]</span>
+<span class="hljs-keyword">val</span> data: <span class="hljs-type">TypedDataset</span>[<span class="hljs-type">Iris</span>] = <span class="hljs-type">TypedDataset</span>.createUnsafe[<span class="hljs-type">Iris</span>](testDataDf)
+<span class="hljs-comment">// data: TypedDataset[Iris] = [sLength: double, sWidth: double ... 3 more fields]</span>
+data.show(<span class="hljs-number">2</span>).run()
+<span class="hljs-comment">// +-------+------+-------+------+-----------+</span>
+<span class="hljs-comment">// |sLength|sWidth|pLength|pWidth|       kind|</span>
+<span class="hljs-comment">// +-------+------+-------+------+-----------+</span>
+<span class="hljs-comment">// |    5.1|   3.5|    1.4|   0.2|Iris-setosa|</span>
+<span class="hljs-comment">// |    4.9|   3.0|    1.4|   0.2|Iris-setosa|</span>
+<span class="hljs-comment">// +-------+------+-------+------+-----------+</span>
+<span class="hljs-comment">// only showing top 2 rows</span>
+<span class="hljs-comment">//</span>
+</code></pre>
+<p>If we do not explicitly define the schema of the CSV file then the types will not match leading to runtime errors. </p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> testDataNoSchema = spark.read.format(<span class="hljs-string">&quot;csv&quot;</span>).load(testDataPath)
+<span class="hljs-comment">// testDataNoSchema: org.apache.spark.sql.package.DataFrame = [_c0: string, _c1: string ... 3 more fields]</span>
+<span class="hljs-keyword">val</span> data: <span class="hljs-type">TypedDataset</span>[<span class="hljs-type">Iris</span>] = <span class="hljs-type">TypedDataset</span>.createUnsafe[<span class="hljs-type">Iris</span>](testDataNoSchema)
+<span class="hljs-comment">// data: TypedDataset[Iris] = [sLength: string, sWidth: string ... 3 more fields]</span>
+</code></pre>
+<pre><code class="lang-scala">data.collect().run()
+<span class="hljs-comment">// java.lang.RuntimeException: Error while decoding: scala.ScalaReflectionException: &lt;none&gt; is not a term</span>
+<span class="hljs-comment">// newInstance(class repl.MdocSession$App0$Iris)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.encoders.ExpressionEncoder$Deserializer.apply(ExpressionEncoder.scala:186)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.encoders.ExpressionEncoder$Deserializer.apply(ExpressionEncoder.scala:173)</span>
+<span class="hljs-comment">//     at scala.collection.TraversableLike.$anonfun$map$1(TraversableLike.scala:286)</span>
+<span class="hljs-comment">//     at scala.collection.IndexedSeqOptimized.foreach(IndexedSeqOptimized.scala:36)</span>
+<span class="hljs-comment">//     at scala.collection.IndexedSeqOptimized.foreach$(IndexedSeqOptimized.scala:33)</span>
+<span class="hljs-comment">//     at scala.collection.mutable.ArrayOps$ofRef.foreach(ArrayOps.scala:198)</span>
+<span class="hljs-comment">//     at scala.collection.TraversableLike.map(TraversableLike.scala:286)</span>
+<span class="hljs-comment">//     at scala.collection.TraversableLike.map$(TraversableLike.scala:279)</span>
+<span class="hljs-comment">//     at scala.collection.mutable.ArrayOps$ofRef.map(ArrayOps.scala:198)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.Dataset.collectFromPlan(Dataset.scala:3696)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.Dataset.$anonfun$collect$1(Dataset.scala:2965)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.Dataset.$anonfun$withAction$1(Dataset.scala:3687)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$5(SQLExecution.scala:103)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.execution.SQLExecution$.withSQLConfPropagated(SQLExecution.scala:163)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$1(SQLExecution.scala:90)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.SparkSession.withActive(SparkSession.scala:775)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:64)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.Dataset.withAction(Dataset.scala:3685)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.Dataset.collect(Dataset.scala:2965)</span>
+<span class="hljs-comment">//     at frameless.TypedDataset.$anonfun$collect$1(TypedDataset.scala:305)</span>
+<span class="hljs-comment">//     at frameless.Job$$anon$4.run(Job.scala:38)</span>
+<span class="hljs-comment">//     at repl.MdocSession$App0$$anonfun$25.apply(WorkingWithCsvParquetJson.md:85)</span>
+<span class="hljs-comment">//     at repl.MdocSession$App0$$anonfun$25.apply(WorkingWithCsvParquetJson.md:85)</span>
+<span class="hljs-comment">// Caused by: scala.ScalaReflectionException: &lt;none&gt; is not a term</span>
+<span class="hljs-comment">//     at scala.reflect.api.Symbols$SymbolApi.asTerm(Symbols.scala:211)</span>
+<span class="hljs-comment">//     at scala.reflect.api.Symbols$SymbolApi.asTerm$(Symbols.scala:211)</span>
+<span class="hljs-comment">//     at scala.reflect.internal.Symbols$SymbolContextApiImpl.asTerm(Symbols.scala:100)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.ScalaReflection$.findConstructor(ScalaReflection.scala:786)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.expressions.objects.NewInstance.$anonfun$constructor$1(objects.scala:481)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.expressions.objects.NewInstance.$anonfun$constructor$5(objects.scala:492)</span>
+<span class="hljs-comment">//     at scala.Option.getOrElse(Option.scala:189)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.expressions.objects.NewInstance.constructor$lzycompute(objects.scala:491)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.expressions.objects.NewInstance.constructor(objects.scala:478)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.expressions.objects.NewInstance.eval(objects.scala:501)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.expressions.InterpretedSafeProjection.apply(InterpretedSafeProjection.scala:117)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.expressions.InterpretedSafeProjection.apply(InterpretedSafeProjection.scala:32)</span>
+<span class="hljs-comment">//     at org.apache.spark.sql.catalyst.encoders.ExpressionEncoder$Deserializer.apply(ExpressionEncoder.scala:182)</span>
+<span class="hljs-comment">//     ... 22 more</span>
+</code></pre>
+<h3 id="dealing-with-csv-files-with-multiple-columns">Dealing with CSV files with multiple columns</h3>
+<p>When the dataset has many columns, it is impractical to define a case class that contains many columns we don&apos;t need. 
+In such case, we can project the columns we do need, cast them to the proper type, and then call <code>createUnsafe</code> using a case class
+that contains a much smaller subset of the columns.  </p>
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> org.apache.spark.sql.types.<span class="hljs-type">DoubleType</span>
+<span class="hljs-keyword">final</span> <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">IrisLight</span>(<span class="hljs-params">kind: <span class="hljs-type">String</span>, sLength: <span class="hljs-type">Double</span></span>)</span>
+
+<span class="hljs-keyword">val</span> testDataDf = spark.read.format(<span class="hljs-string">&quot;csv&quot;</span>).load(testDataPath)
+<span class="hljs-comment">// testDataDf: org.apache.spark.sql.package.DataFrame = [_c0: string, _c1: string ... 3 more fields]</span>
+<span class="hljs-keyword">val</span> projectedDf = testDataDf.select(testDataDf(<span class="hljs-string">&quot;_c4&quot;</span>).as(<span class="hljs-string">&quot;kind&quot;</span>), testDataDf(<span class="hljs-string">&quot;_c1&quot;</span>).cast(<span class="hljs-type">DoubleType</span>).as(<span class="hljs-string">&quot;sLength&quot;</span>))
+<span class="hljs-comment">// projectedDf: org.apache.spark.sql.package.DataFrame = [kind: string, sLength: double]</span>
+<span class="hljs-keyword">val</span> data = <span class="hljs-type">TypedDataset</span>.createUnsafe[<span class="hljs-type">IrisLight</span>](projectedDf)
+<span class="hljs-comment">// data: TypedDataset[IrisLight] = [kind: string, sLength: double]</span>
+data.take(<span class="hljs-number">2</span>).run()
+<span class="hljs-comment">// res5: Seq[IrisLight] = WrappedArray(</span>
+<span class="hljs-comment">//   IrisLight(&quot;Iris-setosa&quot;, 3.5),</span>
+<span class="hljs-comment">//   IrisLight(&quot;Iris-setosa&quot;, 3.0)</span>
+<span class="hljs-comment">// )</span>
+</code></pre>
+<h2 id="working-with-parquet">Working with Parquet</h2>
+<p>Spark is much better at reading the schema from parquet files. </p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> testDataParquet = spark.read.format(<span class="hljs-string">&quot;parquet&quot;</span>).load(testDataPathParquet)
+<span class="hljs-comment">// testDataParquet: org.apache.spark.sql.package.DataFrame = [sLength: double, sWidth: double ... 3 more fields]</span>
+testDataParquet.printSchema
+<span class="hljs-comment">// root</span>
+<span class="hljs-comment">//  |-- sLength: double (nullable = true)</span>
+<span class="hljs-comment">//  |-- sWidth: double (nullable = true)</span>
+<span class="hljs-comment">//  |-- pLength: double (nullable = true)</span>
+<span class="hljs-comment">//  |-- pWidth: double (nullable = true)</span>
+<span class="hljs-comment">//  |-- kind: string (nullable = true)</span>
+<span class="hljs-comment">//</span>
+</code></pre>
+<p>So as long as we use a type (case class) that reflects the same number, type, and order of the fields 
+from the data everything works as expected. </p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> data: <span class="hljs-type">TypedDataset</span>[<span class="hljs-type">Iris</span>] = <span class="hljs-type">TypedDataset</span>.createUnsafe[<span class="hljs-type">Iris</span>](testDataParquet)
+<span class="hljs-comment">// data: TypedDataset[Iris] = [sLength: double, sWidth: double ... 3 more fields]</span>
+data.take(<span class="hljs-number">2</span>).run()
+<span class="hljs-comment">// res10: Seq[Iris] = WrappedArray(</span>
+<span class="hljs-comment">//   Iris(5.1, 3.5, 1.4, 0.2, &quot;Iris-setosa&quot;),</span>
+<span class="hljs-comment">//   Iris(4.9, 3.0, 1.4, 0.2, &quot;Iris-setosa&quot;)</span>
+<span class="hljs-comment">// )</span>
+</code></pre>
+<h3 id="dealing-with-parquet-files-with-multiple-columns">Dealing with Parquet files with multiple columns</h3>
+<p>The main difference compared to CSV is that with Parquet Spark is better at inferring the types. This makes it simpler 
+to project the columns we need without having the cast the to the proper type. </p>
+<pre><code class="lang-scala"><span class="hljs-keyword">final</span> <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">IrisLight</span>(<span class="hljs-params">kind: <span class="hljs-type">String</span>, sLength: <span class="hljs-type">Double</span></span>)</span>
+
+<span class="hljs-keyword">val</span> projectedDf = testDataParquet.select(<span class="hljs-string">&quot;kind&quot;</span>, <span class="hljs-string">&quot;sLength&quot;</span>)
+<span class="hljs-comment">// projectedDf: org.apache.spark.sql.package.DataFrame = [kind: string, sLength: double]</span>
+<span class="hljs-keyword">val</span> data = <span class="hljs-type">TypedDataset</span>.createUnsafe[<span class="hljs-type">IrisLight</span>](projectedDf)
+<span class="hljs-comment">// data: TypedDataset[IrisLight] = [kind: string, sLength: double]</span>
+data.take(<span class="hljs-number">2</span>).run()
+<span class="hljs-comment">// res11: Seq[IrisLight] = WrappedArray(</span>
+<span class="hljs-comment">//   IrisLight(&quot;Iris-setosa&quot;, 5.1),</span>
+<span class="hljs-comment">//   IrisLight(&quot;Iris-setosa&quot;, 4.9)</span>
+<span class="hljs-comment">// )</span>
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="TypedDatasetVsSparkDataset.html" class="navigation navigation-prev " aria-label="Previous page: Comparing TypedDatasets with Spark's Datasets">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="TypedEncoder.html" class="navigation navigation-next " aria-label="Next page: Typed Encoders in Frameless">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Working with CSV and Parquet","level":"1.4","depth":1,"next":{"title":"Typed Encoders in Frameless","level":"1.5","depth":1,"path":"TypedEncoder.md","ref":"TypedEncoder.md","articles":[]},"previous":{"title":"Comparing TypedDatasets with Spark's Datasets","level":"1.3","depth":1,"path":"TypedDatasetVsSparkDataset.md","ref":"TypedDatasetVsSparkDataset.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"WorkingWithCsvParquetJson.md","mtime":"2021-06-14T18:29:02.713Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-06-14T18:50:50.326Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

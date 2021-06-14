@@ -7,7 +7,7 @@
         <title>Using Spark ML with TypedDataset · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.2">
+        <meta name="generator" content="GitBook 3.2.3">
         
         
         
@@ -128,7 +128,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="TypedEncoder.html">
+        <li class="chapter " data-level="1.4" data-path="WorkingWithCsvParquetJson.html">
+            
+                <a href="WorkingWithCsvParquetJson.html">
+            
+                    
+                    Working with CSV and Parquet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="TypedEncoder.html">
             
                 <a href="TypedEncoder.html">
             
@@ -141,7 +154,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="Injection.html">
+        <li class="chapter " data-level="1.6" data-path="Injection.html">
             
                 <a href="Injection.html">
             
@@ -154,7 +167,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6" data-path="Job.html">
+        <li class="chapter " data-level="1.7" data-path="Job.html">
             
                 <a href="Job.html">
             
@@ -167,7 +180,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7" data-path="Cats.html">
+        <li class="chapter " data-level="1.8" data-path="Cats.html">
             
                 <a href="Cats.html">
             
@@ -180,7 +193,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.8" data-path="TypedML.html">
+        <li class="chapter active" data-level="1.9" data-path="TypedML.html">
             
                 <a href="TypedML.html">
             
@@ -193,7 +206,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.9" data-path="TypedDataFrame.html">
+        <li class="chapter " data-level="1.10" data-path="TypedDataFrame.html">
             
                 <a href="TypedDataFrame.html">
             
@@ -279,7 +292,6 @@ to compute feature vectors:</p>
 <span class="hljs-keyword">import</span> org.apache.spark.ml.linalg.<span class="hljs-type">Vector</span>
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HouseData</span>(<span class="hljs-params">squareFeet: <span class="hljs-type">Double</span>, hasGarden: <span class="hljs-type">Boolean</span>, price: <span class="hljs-type">Double</span></span>)</span>
-<span class="hljs-comment">// defined class HouseData</span>
 
 <span class="hljs-keyword">val</span> trainingData = <span class="hljs-type">TypedDataset</span>.create(<span class="hljs-type">Seq</span>(
   <span class="hljs-type">HouseData</span>(<span class="hljs-number">20</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">100000</span>),
@@ -287,19 +299,15 @@ to compute feature vectors:</p>
   <span class="hljs-type">HouseData</span>(<span class="hljs-number">50</span>, <span class="hljs-literal">true</span>, <span class="hljs-number">250000</span>),
   <span class="hljs-type">HouseData</span>(<span class="hljs-number">100</span>, <span class="hljs-literal">true</span>, <span class="hljs-number">500000</span>)
 ))
-<span class="hljs-comment">// trainingData: frameless.TypedDataset[HouseData] = [squareFeet: double, hasGarden: boolean ... 1 more field]</span>
+<span class="hljs-comment">// trainingData: TypedDataset[HouseData] = [squareFeet: double, hasGarden: boolean ... 1 more field]</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Features</span>(<span class="hljs-params">squareFeet: <span class="hljs-type">Double</span>, hasGarden: <span class="hljs-type">Boolean</span></span>)</span>
-<span class="hljs-comment">// defined class Features</span>
-
 <span class="hljs-keyword">val</span> assembler = <span class="hljs-type">TypedVectorAssembler</span>[<span class="hljs-type">Features</span>]
-<span class="hljs-comment">// assembler: frameless.ml.feature.TypedVectorAssembler[Features] = frameless.ml.feature.TypedVectorAssembler@a559710</span>
+<span class="hljs-comment">// assembler: TypedVectorAssembler[Features] = frameless.ml.feature.TypedVectorAssembler@573c6490</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HouseDataWithFeatures</span>(<span class="hljs-params">squareFeet: <span class="hljs-type">Double</span>, hasGarden: <span class="hljs-type">Boolean</span>, price: <span class="hljs-type">Double</span>, features: <span class="hljs-type">Vector</span></span>)</span>
-<span class="hljs-comment">// defined class HouseDataWithFeatures</span>
-
 <span class="hljs-keyword">val</span> trainingDataWithFeatures = assembler.transform(trainingData).as[<span class="hljs-type">HouseDataWithFeatures</span>]
-<span class="hljs-comment">// trainingDataWithFeatures: frameless.TypedDataset[HouseDataWithFeatures] = [squareFeet: double, hasGarden: boolean ... 2 more fields]</span>
+<span class="hljs-comment">// trainingDataWithFeatures: TypedDataset[HouseDataWithFeatures] = [squareFeet: double, hasGarden: boolean ... 2 more fields]</span>
 </code></pre>
 <p>In the above code snippet, <code>.as[HouseDataWithFeatures]</code> is a <code>TypedDataset</code>&apos;s type-safe cast
 (see <a href="https://typelevel.org/frameless/FeatureOverview.html" target="_blank">TypedDataset: Feature Overview</a>):</p>
@@ -311,70 +319,65 @@ to compute feature vectors:</p>
 </span>)</span>
 </code></pre>
 <pre><code class="lang-scala">assembler.transform(trainingData).as[<span class="hljs-type">WrongHouseFeatures</span>]
-<span class="hljs-comment">// &lt;console&gt;:39: error: could not find implicit value for parameter as: frameless.ops.As[(Double, Boolean, Double, org.apache.spark.ml.linalg.Vector),WrongHouseFeatures]</span>
-<span class="hljs-comment">//        assembler.transform(trainingData).as[WrongHouseFeatures]</span>
-<span class="hljs-comment">//                                            ^</span>
+<span class="hljs-comment">// error: could not find implicit value for parameter as: frameless.ops.As[(Double, Boolean, Double, org.apache.spark.ml.linalg.Vector),repl.MdocSession.App0.WrongHouseFeatures]</span>
+<span class="hljs-comment">// assembler.transform(trainingData).as[WrongHouseFeatures]</span>
+<span class="hljs-comment">// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 </code></pre>
 <p>Moreover, <code>TypedVectorAssembler[Features]</code> will compile only if <code>Features</code> contains exclusively fields of type Numeric or Boolean:</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WrongFeatures</span>(<span class="hljs-params">squareFeet: <span class="hljs-type">Double</span>, hasGarden: <span class="hljs-type">Boolean</span>, city: <span class="hljs-type">String</span></span>)</span>
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-type">TypedVectorAssembler</span>[<span class="hljs-type">WrongFeatures</span>]
-<span class="hljs-comment">// &lt;console&gt;:37: error: Cannot prove that WrongFeatures is a valid input type. Input type must only contain fields of numeric or boolean types.</span>
-<span class="hljs-comment">//        TypedVectorAssembler[WrongFeatures]</span>
-<span class="hljs-comment">//                            ^</span>
+<span class="hljs-comment">// error: Cannot prove that repl.MdocSession.App0.WrongFeatures is a valid input type. Input type must only contain fields of numeric or boolean types.</span>
+<span class="hljs-comment">// TypedVectorAssembler[WrongFeatures]</span>
+<span class="hljs-comment">// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 </code></pre>
 <p>The subsequent call <code>assembler.transform(trainingData)</code> compiles only if <code>trainingData</code> contains all fields (names and types)
 of <code>Features</code>:</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WrongHouseData</span>(<span class="hljs-params">squareFeet: <span class="hljs-type">Double</span>, price: <span class="hljs-type">Double</span></span>) <span class="hljs-title">//</span> <span class="hljs-title">hasGarden</span> <span class="hljs-title">is</span> <span class="hljs-title">missing</span></span>
-<span class="hljs-comment">// defined class WrongHouseData</span>
-
+<pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WrongHouseData</span>(<span class="hljs-params">squareFeet: <span class="hljs-type">Double</span>, price: <span class="hljs-type">Double</span></span>) <span class="hljs-title">//</span> <span class="hljs-title">hasGarden</span> <span class="hljs-title">is</span> <span class="hljs-title">missing</span> <span class="hljs-title">//</span> <span class="hljs-title">hasGarden</span> <span class="hljs-title">is</span> <span class="hljs-title">missing</span></span>
 <span class="hljs-keyword">val</span> wrongTrainingData = <span class="hljs-type">TypedDataset</span>.create(<span class="hljs-type">Seq</span>(<span class="hljs-type">WrongHouseData</span>(<span class="hljs-number">20</span>, <span class="hljs-number">100000</span>)))
-<span class="hljs-comment">// wrongTrainingData: frameless.TypedDataset[WrongHouseData] = [squareFeet: double, price: double]</span>
+<span class="hljs-comment">// wrongTrainingData: TypedDataset[WrongHouseData] = [squareFeet: double, price: double]</span>
 </code></pre>
 <pre><code class="lang-scala">assembler.transform(wrongTrainingData)
-<span class="hljs-comment">// &lt;console&gt;:37: error: Cannot prove that WrongHouseData can be projected to Features. Perhaps not all member names and types of Features are the same in WrongHouseData?</span>
-<span class="hljs-comment">//        assembler.transform(wrongTrainingData)</span>
-<span class="hljs-comment">//                           ^</span>
+<span class="hljs-comment">// error: Cannot prove that repl.MdocSession.App0.WrongHouseData can be projected to repl.MdocSession.App0.Features. Perhaps not all member names and types of repl.MdocSession.App0.Features are the same in repl.MdocSession.App0.WrongHouseData?</span>
+<span class="hljs-comment">// assembler.transform(wrongTrainingData)</span>
+<span class="hljs-comment">// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 </code></pre>
 <p>Then, we train the model. To train a Random Forest, one needs to feed it with features (what we predict from) and
 with a label (what we predict). In our example, <code>price</code> is the label, <code>features</code> are the features:</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RFInputs</span>(<span class="hljs-params">price: <span class="hljs-type">Double</span>, features: <span class="hljs-type">Vector</span></span>)</span>
-<span class="hljs-comment">// defined class RFInputs</span>
-
 <span class="hljs-keyword">val</span> rf = <span class="hljs-type">TypedRandomForestRegressor</span>[<span class="hljs-type">RFInputs</span>]
-<span class="hljs-comment">// rf: frameless.ml.regression.TypedRandomForestRegressor[RFInputs] = frameless.ml.regression.TypedRandomForestRegressor@37d61f51</span>
+<span class="hljs-comment">// rf: TypedRandomForestRegressor[RFInputs] = frameless.ml.regression.TypedRandomForestRegressor@4aa486e3</span>
 
 <span class="hljs-keyword">val</span> model = rf.fit(trainingDataWithFeatures).run()
-<span class="hljs-comment">// model: frameless.ml.AppendTransformer[RFInputs,frameless.ml.regression.TypedRandomForestRegressor.Outputs,org.apache.spark.ml.regression.RandomForestRegressionModel] = frameless.ml.TypedEstimator$$anon$1@5d5c3</span>
+<span class="hljs-comment">// model: AppendTransformer[RFInputs, TypedRandomForestRegressor.Outputs, org.apache.spark.ml.regression.RandomForestRegressionModel] = frameless.ml.TypedEstimator$$anon$1@4ec7588b</span>
 </code></pre>
 <p><code>TypedRandomForestRegressor[RFInputs]</code> compiles only if <code>RFInputs</code>
 contains only one field of type Double (the label) and one field of type Vector (the features):</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WrongRFInputs</span>(<span class="hljs-params">labelOfWrongType: <span class="hljs-type">String</span>, features: <span class="hljs-type">Vector</span></span>)</span>
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-type">TypedRandomForestRegressor</span>[<span class="hljs-type">WrongRFInputs</span>]
-<span class="hljs-comment">// &lt;console&gt;:37: error: Cannot prove that WrongRFInputs is a valid input type. Input type must only contain a field of type Double (the label) and a field of type org.apache.spark.ml.linalg.Vector (the features).</span>
-<span class="hljs-comment">//        TypedRandomForestRegressor[WrongRFInputs]</span>
-<span class="hljs-comment">//                                  ^</span>
+<span class="hljs-comment">// error: Cannot prove that repl.MdocSession.App0.WrongRFInputs is a valid input type. Input type must only contain a field of type Double (the label) and a field of type org.apache.spark.ml.linalg.Vector (the features).</span>
+<span class="hljs-comment">// TypedRandomForestRegressor[WrongRFInputs]</span>
+<span class="hljs-comment">// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 </code></pre>
 <p>The subsequent <code>rf.fit(trainingDataWithFeatures)</code> call compiles only if <code>trainingDataWithFeatures</code> contains the same fields
 (names and types) as RFInputs.</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> wrongTrainingDataWithFeatures = <span class="hljs-type">TypedDataset</span>.create(<span class="hljs-type">Seq</span>(<span class="hljs-type">HouseData</span>(<span class="hljs-number">20</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">100000</span>))) <span class="hljs-comment">// features are missing</span>
-<span class="hljs-comment">// wrongTrainingDataWithFeatures: frameless.TypedDataset[HouseData] = [squareFeet: double, hasGarden: boolean ... 1 more field]</span>
+<span class="hljs-comment">// wrongTrainingDataWithFeatures: TypedDataset[HouseData] = [squareFeet: double, hasGarden: boolean ... 1 more field]</span>
 </code></pre>
 <pre><code class="lang-scala">rf.fit(wrongTrainingDataWithFeatures) 
-<span class="hljs-comment">// &lt;console&gt;:37: error: Cannot prove that HouseData can be projected to RFInputs. Perhaps not all member names and types of RFInputs are the same in HouseData?</span>
-<span class="hljs-comment">//        rf.fit(wrongTrainingDataWithFeatures)</span>
-<span class="hljs-comment">//              ^</span>
+<span class="hljs-comment">// error: Cannot prove that repl.MdocSession.App0.HouseData can be projected to repl.MdocSession.App0.RFInputs. Perhaps not all member names and types of repl.MdocSession.App0.RFInputs are the same in repl.MdocSession.App0.HouseData?</span>
+<span class="hljs-comment">// rf.fit(wrongTrainingDataWithFeatures) </span>
+<span class="hljs-comment">// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 </code></pre>
 <h3 id="prediction">Prediction</h3>
 <p>We now want to predict <code>price</code> for <code>testData</code> using the previously trained model. Like the Spark ML API,
 <code>testData</code> has a default value for <code>price</code> (<code>0</code> in our case) that will be ignored at prediction time. We reuse
 our <code>assembler</code> to compute the feature vector of <code>testData</code>.</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> testData = <span class="hljs-type">TypedDataset</span>.create(<span class="hljs-type">Seq</span>(<span class="hljs-type">HouseData</span>(<span class="hljs-number">70</span>, <span class="hljs-literal">true</span>, <span class="hljs-number">0</span>)))
-<span class="hljs-comment">// testData: frameless.TypedDataset[HouseData] = [squareFeet: double, hasGarden: boolean ... 1 more field]</span>
-
+<span class="hljs-comment">// testData: TypedDataset[HouseData] = [squareFeet: double, hasGarden: boolean ... 1 more field]</span>
 <span class="hljs-keyword">val</span> testDataWithFeatures = assembler.transform(testData).as[<span class="hljs-type">HouseDataWithFeatures</span>]
-<span class="hljs-comment">// testDataWithFeatures: frameless.TypedDataset[HouseDataWithFeatures] = [squareFeet: double, hasGarden: boolean ... 2 more fields]</span>
+<span class="hljs-comment">// testDataWithFeatures: TypedDataset[HouseDataWithFeatures] = [squareFeet: double, hasGarden: boolean ... 2 more fields]</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HousePricePrediction</span>(<span class="hljs-params">
   squareFeet: <span class="hljs-type">Double</span>,
@@ -383,20 +386,18 @@ our <code>assembler</code> to compute the feature vector of <code>testData</code
   features: <span class="hljs-type">Vector</span>,
   predictedPrice: <span class="hljs-type">Double</span>
 </span>)</span>
-<span class="hljs-comment">// defined class HousePricePrediction</span>
-
 <span class="hljs-keyword">val</span> predictions = model.transform(testDataWithFeatures).as[<span class="hljs-type">HousePricePrediction</span>]
-<span class="hljs-comment">// predictions: frameless.TypedDataset[HousePricePrediction] = [squareFeet: double, hasGarden: boolean ... 3 more fields]</span>
+<span class="hljs-comment">// predictions: TypedDataset[HousePricePrediction] = [squareFeet: double, hasGarden: boolean ... 3 more fields]</span>
 
 predictions.select(predictions.col(<span class="hljs-symbol">&apos;predictedPrice</span>)).collect.run()
-<span class="hljs-comment">// res6: Seq[Double] = WrappedArray(296250.0)</span>
+<span class="hljs-comment">// res7: Seq[Double] = WrappedArray(296250.0)</span>
 </code></pre>
 <p><code>model.transform(testDataWithFeatures)</code> will only compile if <code>testDataWithFeatures</code> contains a field <code>price</code> of type Double
 and a field <code>features</code> of type Vector:</p>
 <pre><code class="lang-scala">model.transform(testData)
-<span class="hljs-comment">// &lt;console&gt;:37: error: Cannot prove that HouseData can be projected to RFInputs. Perhaps not all member names and types of RFInputs are the same in HouseData?</span>
-<span class="hljs-comment">//        model.transform(testData)</span>
-<span class="hljs-comment">//                       ^</span>
+<span class="hljs-comment">// error: Cannot prove that repl.MdocSession.App0.HouseData can be projected to repl.MdocSession.App0.RFInputs. Perhaps not all member names and types of repl.MdocSession.App0.RFInputs are the same in repl.MdocSession.App0.HouseData?</span>
+<span class="hljs-comment">// val model = rf.fit(indexedData).run()</span>
+<span class="hljs-comment">//     ^^^^^^^^^^^^^^^^^^^^</span>
 </code></pre>
 <h2 id="example-2-predict-a-categorical-value-using-a-typedrandomforestclassifier">Example 2: predict a categorical value using a <code>TypedRandomForestClassifier</code></h2>
 <p>In this example, we want to predict in which city a house is located depending on its price and its square footage. We use a
@@ -408,7 +409,6 @@ to index <code>city</code> values in order to be able to pass them to a <code>Ty
 <pre><code class="lang-scala"><span class="hljs-keyword">import</span> frameless.ml.classification._
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HouseData</span>(<span class="hljs-params">squareFeet: <span class="hljs-type">Double</span>, city: <span class="hljs-type">String</span>, price: <span class="hljs-type">Double</span></span>)</span>
-<span class="hljs-comment">// defined class HouseData</span>
 
 <span class="hljs-keyword">val</span> trainingData = <span class="hljs-type">TypedDataset</span>.create(<span class="hljs-type">Seq</span>(
   <span class="hljs-type">HouseData</span>(<span class="hljs-number">100</span>, <span class="hljs-string">&quot;lyon&quot;</span>, <span class="hljs-number">100000</span>),
@@ -416,31 +416,23 @@ to index <code>city</code> values in order to be able to pass them to a <code>Ty
   <span class="hljs-type">HouseData</span>(<span class="hljs-number">100</span>, <span class="hljs-string">&quot;san francisco&quot;</span>, <span class="hljs-number">500000</span>),
   <span class="hljs-type">HouseData</span>(<span class="hljs-number">150</span>, <span class="hljs-string">&quot;san francisco&quot;</span>, <span class="hljs-number">900000</span>)
 ))
-<span class="hljs-comment">// trainingData: frameless.TypedDataset[HouseData] = [squareFeet: double, city: string ... 1 more field]</span>
+<span class="hljs-comment">// trainingData: TypedDataset[HouseData] = [squareFeet: double, city: string ... 1 more field]</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Features</span>(<span class="hljs-params">price: <span class="hljs-type">Double</span>, squareFeet: <span class="hljs-type">Double</span></span>)</span>
-<span class="hljs-comment">// defined class Features</span>
-
 <span class="hljs-keyword">val</span> vectorAssembler = <span class="hljs-type">TypedVectorAssembler</span>[<span class="hljs-type">Features</span>]
-<span class="hljs-comment">// vectorAssembler: frameless.ml.feature.TypedVectorAssembler[Features] = frameless.ml.feature.TypedVectorAssembler@eb06753</span>
+<span class="hljs-comment">// vectorAssembler: TypedVectorAssembler[Features] = frameless.ml.feature.TypedVectorAssembler@6f8162b2</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HouseDataWithFeatures</span>(<span class="hljs-params">squareFeet: <span class="hljs-type">Double</span>, city: <span class="hljs-type">String</span>, price: <span class="hljs-type">Double</span>, features: <span class="hljs-type">Vector</span></span>)</span>
-<span class="hljs-comment">// defined class HouseDataWithFeatures</span>
-
 <span class="hljs-keyword">val</span> dataWithFeatures = vectorAssembler.transform(trainingData).as[<span class="hljs-type">HouseDataWithFeatures</span>]
-<span class="hljs-comment">// dataWithFeatures: frameless.TypedDataset[HouseDataWithFeatures] = [squareFeet: double, city: string ... 2 more fields]</span>
+<span class="hljs-comment">// dataWithFeatures: TypedDataset[HouseDataWithFeatures] = [squareFeet: double, city: string ... 2 more fields]</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StringIndexerInput</span>(<span class="hljs-params">city: <span class="hljs-type">String</span></span>)</span>
-<span class="hljs-comment">// defined class StringIndexerInput</span>
-
 <span class="hljs-keyword">val</span> indexer = <span class="hljs-type">TypedStringIndexer</span>[<span class="hljs-type">StringIndexerInput</span>]
-<span class="hljs-comment">// indexer: frameless.ml.feature.TypedStringIndexer[StringIndexerInput] = frameless.ml.feature.TypedStringIndexer@4c2621e0</span>
-
+<span class="hljs-comment">// indexer: TypedStringIndexer[StringIndexerInput] = frameless.ml.feature.TypedStringIndexer@78360bb8</span>
 indexer.estimator.setHandleInvalid(<span class="hljs-string">&quot;keep&quot;</span>)
-<span class="hljs-comment">// res8: indexer.estimator.type = strIdx_267bc5cb88b4</span>
-
+<span class="hljs-comment">// res12: org.apache.spark.ml.feature.StringIndexer = strIdx_f41268aa9351</span>
 <span class="hljs-keyword">val</span> indexerModel = indexer.fit(dataWithFeatures).run()
-<span class="hljs-comment">// indexerModel: frameless.ml.AppendTransformer[StringIndexerInput,frameless.ml.feature.TypedStringIndexer.Outputs,org.apache.spark.ml.feature.StringIndexerModel] = frameless.ml.TypedEstimator$$anon$1@6145e82d</span>
+<span class="hljs-comment">// indexerModel: AppendTransformer[StringIndexerInput, TypedStringIndexer.Outputs, org.apache.spark.ml.feature.StringIndexerModel] = frameless.ml.TypedEstimator$$anon$1@26bfce68</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HouseDataWithFeaturesAndIndex</span>(<span class="hljs-params">
   squareFeet: <span class="hljs-type">Double</span>,
@@ -449,39 +441,32 @@ indexer.estimator.setHandleInvalid(<span class="hljs-string">&quot;keep&quot;</s
   features: <span class="hljs-type">Vector</span>,
   cityIndexed: <span class="hljs-type">Double</span>
 </span>)</span>
-<span class="hljs-comment">// defined class HouseDataWithFeaturesAndIndex</span>
-
 <span class="hljs-keyword">val</span> indexedData = indexerModel.transform(dataWithFeatures).as[<span class="hljs-type">HouseDataWithFeaturesAndIndex</span>]
-<span class="hljs-comment">// indexedData: frameless.TypedDataset[HouseDataWithFeaturesAndIndex] = [squareFeet: double, city: string ... 3 more fields]</span>
+<span class="hljs-comment">// indexedData: TypedDataset[HouseDataWithFeaturesAndIndex] = [squareFeet: double, city: string ... 3 more fields]</span>
 </code></pre>
 <p>Then, we train the model:</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RFInputs</span>(<span class="hljs-params">cityIndexed: <span class="hljs-type">Double</span>, features: <span class="hljs-type">Vector</span></span>)</span>
-<span class="hljs-comment">// defined class RFInputs</span>
-
 <span class="hljs-keyword">val</span> rf = <span class="hljs-type">TypedRandomForestClassifier</span>[<span class="hljs-type">RFInputs</span>]
-<span class="hljs-comment">// rf: frameless.ml.classification.TypedRandomForestClassifier[RFInputs] = frameless.ml.classification.TypedRandomForestClassifier@33ab9b32</span>
+<span class="hljs-comment">// rf: TypedRandomForestClassifier[RFInputs] = frameless.ml.classification.TypedRandomForestClassifier@1052ce0b</span>
 
 <span class="hljs-keyword">val</span> model = rf.fit(indexedData).run()
-<span class="hljs-comment">// model: frameless.ml.AppendTransformer[RFInputs,frameless.ml.classification.TypedRandomForestClassifier.Outputs,org.apache.spark.ml.classification.RandomForestClassificationModel] = frameless.ml.TypedEstimator$$anon$1@5bd75b8e</span>
+<span class="hljs-comment">// model: AppendTransformer[RFInputs, TypedRandomForestClassifier.Outputs, org.apache.spark.ml.classification.RandomForestClassificationModel] = frameless.ml.TypedEstimator$$anon$1@39a5b816</span>
 </code></pre>
 <h3 id="prediction">Prediction</h3>
 <p>We now want to predict <code>city</code> for <code>testData</code> using the previously trained model. Like the Spark ML API,
 <code>testData</code> has a default value for <code>city</code> (empty string in our case) that will be ignored at prediction time. We reuse
 our <code>vectorAssembler</code> to compute the feature vector of <code>testData</code> and our <code>indexerModel</code> to index <code>city</code>.</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> testData = <span class="hljs-type">TypedDataset</span>.create(<span class="hljs-type">Seq</span>(<span class="hljs-type">HouseData</span>(<span class="hljs-number">120</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-number">800000</span>)))
-<span class="hljs-comment">// testData: frameless.TypedDataset[HouseData] = [squareFeet: double, city: string ... 1 more field]</span>
+<span class="hljs-comment">// testData: TypedDataset[HouseData] = [squareFeet: double, city: string ... 1 more field]</span>
 
 <span class="hljs-keyword">val</span> testDataWithFeatures = vectorAssembler.transform(testData).as[<span class="hljs-type">HouseDataWithFeatures</span>]
-<span class="hljs-comment">// testDataWithFeatures: frameless.TypedDataset[HouseDataWithFeatures] = [squareFeet: double, city: string ... 2 more fields]</span>
-
+<span class="hljs-comment">// testDataWithFeatures: TypedDataset[HouseDataWithFeatures] = [squareFeet: double, city: string ... 2 more fields]</span>
 <span class="hljs-keyword">val</span> indexedTestData = indexerModel.transform(testDataWithFeatures).as[<span class="hljs-type">HouseDataWithFeaturesAndIndex</span>]
-<span class="hljs-comment">// indexedTestData: frameless.TypedDataset[HouseDataWithFeaturesAndIndex] = [squareFeet: double, city: string ... 3 more fields]</span>
+<span class="hljs-comment">// indexedTestData: TypedDataset[HouseDataWithFeaturesAndIndex] = [squareFeet: double, city: string ... 3 more fields]</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HouseCityPredictionInputs</span>(<span class="hljs-params">features: <span class="hljs-type">Vector</span>, cityIndexed: <span class="hljs-type">Double</span></span>)</span>
-<span class="hljs-comment">// defined class HouseCityPredictionInputs</span>
-
 <span class="hljs-keyword">val</span> testInput = indexedTestData.project[<span class="hljs-type">HouseCityPredictionInputs</span>]
-<span class="hljs-comment">// testInput: frameless.TypedDataset[HouseCityPredictionInputs] = [features: vector, cityIndexed: double]</span>
+<span class="hljs-comment">// testInput: TypedDataset[HouseCityPredictionInputs] = [features: vector, cityIndexed: double]</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HouseCityPredictionIndexed</span>(<span class="hljs-params">
   features: <span class="hljs-type">Vector</span>,
@@ -490,21 +475,14 @@ our <code>vectorAssembler</code> to compute the feature vector of <code>testData
   probability: <span class="hljs-type">Vector</span>,
   predictedCityIndexed: <span class="hljs-type">Double</span>
 </span>)</span>
-<span class="hljs-comment">// defined class HouseCityPredictionIndexed</span>
-
 <span class="hljs-keyword">val</span> indexedPredictions = model.transform(testInput).as[<span class="hljs-type">HouseCityPredictionIndexed</span>]
-<span class="hljs-comment">// indexedPredictions: frameless.TypedDataset[HouseCityPredictionIndexed] = [features: vector, cityIndexed: double ... 3 more fields]</span>
+<span class="hljs-comment">// indexedPredictions: TypedDataset[HouseCityPredictionIndexed] = [features: vector, cityIndexed: double ... 3 more fields]</span>
 </code></pre>
 <p>Then, we use a <code>TypedIndexToString</code> to get back a String value from <code>predictedCityIndexed</code>. <code>TypedIndexToString</code> takes
 as input the label array computed by our previous <code>indexerModel</code>:</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">IndexToStringInput</span>(<span class="hljs-params">predictedCityIndexed: <span class="hljs-type">Double</span></span>)</span>
-<span class="hljs-comment">// defined class IndexToStringInput</span>
-
 <span class="hljs-keyword">val</span> indexToString = <span class="hljs-type">TypedIndexToString</span>[<span class="hljs-type">IndexToStringInput</span>](indexerModel.transformer.labels)
-<span class="hljs-comment">// &lt;console&gt;:40: warning: method labels in class StringIndexerModel is deprecated (since 3.0.0): `labels` is deprecated and will be removed in 3.1.0. Use `labelsArray` instead.</span>
-<span class="hljs-comment">//        val indexToString = TypedIndexToString[IndexToStringInput](indexerModel.transformer.labels)</span>
-<span class="hljs-comment">//                                                                                            ^</span>
-<span class="hljs-comment">// indexToString: frameless.ml.feature.TypedIndexToString[IndexToStringInput] = frameless.ml.feature.TypedIndexToString@355dd92d</span>
+<span class="hljs-comment">// indexToString: TypedIndexToString[IndexToStringInput] = frameless.ml.feature.TypedIndexToString@30e4f124</span>
 
 <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HouseCityPrediction</span>(<span class="hljs-params">
   features: <span class="hljs-type">Vector</span>,
@@ -514,13 +492,11 @@ as input the label array computed by our previous <code>indexerModel</code>:</p>
   predictedCityIndexed: <span class="hljs-type">Double</span>,
   predictedCity: <span class="hljs-type">String</span>
 </span>)</span>
-<span class="hljs-comment">// defined class HouseCityPrediction</span>
-
 <span class="hljs-keyword">val</span> predictions = indexToString.transform(indexedPredictions).as[<span class="hljs-type">HouseCityPrediction</span>]
-<span class="hljs-comment">// predictions: frameless.TypedDataset[HouseCityPrediction] = [features: vector, cityIndexed: double ... 4 more fields]</span>
+<span class="hljs-comment">// predictions: TypedDataset[HouseCityPrediction] = [features: vector, cityIndexed: double ... 4 more fields]</span>
 
 predictions.select(predictions.col(<span class="hljs-symbol">&apos;predictedCity</span>)).collect.run()
-<span class="hljs-comment">// res9: Seq[String] = WrappedArray(san francisco)</span>
+<span class="hljs-comment">// res13: Seq[String] = WrappedArray(&quot;san francisco&quot;)</span>
 </code></pre>
 <h2 id="list-of-currently-implemented-typedestimators">List of currently implemented <code>TypedEstimator</code>s</h2>
 <ul>
@@ -543,18 +519,15 @@ and <code>org.apache.spark.ml.linalg.Matrix</code>:</p>
 <span class="hljs-keyword">import</span> org.apache.spark.ml.linalg._
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> vector = <span class="hljs-type">Vectors</span>.dense(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
-<span class="hljs-comment">// vector: org.apache.spark.ml.linalg.Vector = [1.0,2.0,3.0]</span>
-
+<span class="hljs-comment">// vector: Vector = [1.0,2.0,3.0]</span>
 <span class="hljs-keyword">val</span> vectorDs = <span class="hljs-type">TypedDataset</span>.create(<span class="hljs-type">Seq</span>(<span class="hljs-string">&quot;label&quot;</span> -&gt; vector))
-<span class="hljs-comment">// vectorDs: frameless.TypedDataset[(String, org.apache.spark.ml.linalg.Vector)] = [_1: string, _2: vector]</span>
+<span class="hljs-comment">// vectorDs: TypedDataset[(String, Vector)] = [_1: string, _2: vector]</span>
 
 <span class="hljs-keyword">val</span> matrix = <span class="hljs-type">Matrices</span>.dense(<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>))
-<span class="hljs-comment">// matrix: org.apache.spark.ml.linalg.Matrix =</span>
-<span class="hljs-comment">// 1.0</span>
-<span class="hljs-comment">// 2.0</span>
-
+<span class="hljs-comment">// matrix: Matrix = 1.0  </span>
+<span class="hljs-comment">// 2.0  </span>
 <span class="hljs-keyword">val</span> matrixDs = <span class="hljs-type">TypedDataset</span>.create(<span class="hljs-type">Seq</span>(<span class="hljs-string">&quot;label&quot;</span> -&gt; matrix))
-<span class="hljs-comment">// matrixDs: frameless.TypedDataset[(String, org.apache.spark.ml.linalg.Matrix)] = [_1: string, _2: matrix]</span>
+<span class="hljs-comment">// matrixDs: TypedDataset[(String, Matrix)] = [_1: string, _2: matrix]</span>
 </code></pre>
 <p>Under the hood, Vector and Matrix are encoded using <code>org.apache.spark.ml.linalg.VectorUDT</code> 
 and <code>org.apache.spark.ml.linalg.MatrixUDT</code>. This is possible thanks to the implicit derivation 
@@ -602,7 +575,7 @@ from <code>org.apache.spark.sql.types.UserDefinedType[A]</code> to <code>TypedEn
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Using Spark ML with TypedDataset","level":"1.8","depth":1,"next":{"title":"Proof of Concept: TypedDataFrame","level":"1.9","depth":1,"path":"TypedDataFrame.md","ref":"TypedDataFrame.md","articles":[]},"previous":{"title":"Using Cats with RDDs","level":"1.7","depth":1,"path":"Cats.md","ref":"Cats.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"TypedML.md","mtime":"2021-01-20T04:29:02.680Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2021-01-20T04:29:45.388Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Using Spark ML with TypedDataset","level":"1.9","depth":1,"next":{"title":"Proof of Concept: TypedDataFrame","level":"1.10","depth":1,"path":"TypedDataFrame.md","ref":"TypedDataFrame.md","articles":[]},"previous":{"title":"Using Cats with RDDs","level":"1.8","depth":1,"path":"Cats.md","ref":"Cats.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"TypedML.md","mtime":"2021-06-14T18:28:59.813Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-06-14T18:50:50.326Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
