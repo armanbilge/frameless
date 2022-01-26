@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "gitbook": "^2.6.9",
-    "gitbook-cli": "github:gengjiawen/gitbook-cli",
-    "graceful-fs": "^4.2.6"
-  }
-}
